@@ -1,10 +1,9 @@
-Behavioral Cloning Project
+#Behavioral Cloning Project
 ---
 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-Overview
----
+##Overview
 This repository contains the work I did within **Project #3 of Udacity's Self-Driving Car Nanodegree Program**. Objective of the project is to learn a car to drive on a simulator track, using a deep-learning approach. For this Udacity provides us with a car driving simulator it has developed.
 
 *Snapshot of Udacity's driving simulator*
@@ -12,9 +11,7 @@ This repository contains the work I did within **Project #3 of Udacity's Self-Dr
 ![](./Images/screen-shot-simulator.jpg)
 
 
-Project objectives and steps
----
-
+##Project objectives and steps
 
 * Use the simulator to collect data of good driving behavior
 * Build, a convolution neural network in Keras that predicts steering angles from images
@@ -23,8 +20,8 @@ Project objectives and steps
 * Summarize the results with a written report
 
 
-Repository content
----
+##Repository content
+
 The repository includes the following files:
 
 * _model.py_ : script to create and train the CNN
@@ -42,8 +39,8 @@ Using the Udacity provided simulator and the _drive.py_ file, the car can be dri
 python drive.py model.h5
 ```
 
-Dependencies
----
+##Dependencies
+
 This lab requires the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit).
 
 The lab environment can be created with CarND Term1 Starter Kit. Click [here](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) for the details.

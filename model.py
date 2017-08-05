@@ -1,12 +1,5 @@
 # -*- coding: utf-8 -*-
-"""
-Éditeur de Spyder
 
-Ceci est un script temporaire.
-"""
-
-# sudo apt-get update
-# sudo apt-get install libgtk2.0-dev
 import os
 import numpy as np
 import cv2
@@ -15,7 +8,7 @@ import matplotlib.pyplot as plt
 
 ### Parameters
 # Input file
-data_directory = './data1/'
+data_directory = './data/'
 # Output directory
 out_directory = './test'
 # Image augmentation

@@ -1,9 +1,10 @@
-#Behavioral Cloning Project
+Behavioral Cloning Project
 ---
 
 [![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
 ##Overview
+
 This repository contains the work I did within **Project #3 of Udacity's Self-Driving Car Nanodegree Program**. Objective of the project is to learn a car to drive on a simulator track, using a deep-learning approach. For this Udacity provides us with a car driving simulator it has developed.
 
 *Snapshot of Udacity's driving simulator*
@@ -27,7 +28,7 @@ The repository includes the following files:
 * _model.py_ : script to create and train the CNN
 * _drive.py_ : script for driving the car in autonomous mode
 * _model.h5_ : model of the trained convolution neural network 
-* _writeup\_report.md_ : report of the work done
+* _writeup\_report.md_ : work report
 
 And two directories:
 

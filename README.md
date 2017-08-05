@@ -40,7 +40,7 @@ Using the Udacity provided simulator and the _drive.py_ file, the car can be dri
 python drive.py model.h5
 ```
 
-##Dependencies
+## Dependencies
 
 This lab requires the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit).
 

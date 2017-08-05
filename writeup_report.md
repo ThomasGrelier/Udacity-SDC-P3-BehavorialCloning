@@ -1,4 +1,4 @@
-#**Behavioral Cloning Project** 
+# **Behavioral Cloning Project** 
 
 ---
 
@@ -35,7 +35,7 @@ appears to be better for having a smooth drive. However it is still very difficu
 
 Fortunately Udacity has a generated a dataset from the simulator which we car use to learn the car to drive properly. 
 
-##Solution Design Approach
+## Solution Design Approach
 
 It turned out to be very difficult to generate a nice training data set with the simulator. Having the car drive straight in the middle of the road is very difficult with the keyboard or mouse. As a consequence, I decided  to use the data set provided by udacity to set up my model.
 
@@ -62,7 +62,7 @@ I also tried to test the behaviour on the second track. However it was a complet
 
 ## Solution detail
 
-###Data Set
+### Data Set
 
 As I mentioned before I decided to use Udacity's image set. It contains 8036 sets of 3 images. Indeed the car has three cameras (left, center, right) so for each recording we get 3 images. Overall this amounts to more than 24000 images.
 I made a video of the training set, using onlyt the center camera image. It can be found in the [./Videos]() directory. We see that the training consisted in several laps in normal and reverse directions. We also can notice that the car has not a perfect straight driving!
@@ -73,14 +73,14 @@ I made a video of the training set, using onlyt the center camera image. It can 
 
 To augment the data set, I implemented three methods which are described hereafter.
 
-####Image flipping
+#### Image flipping
 
 I randomly (with a probability of 0.5) flipped images (and steering angle): it prevents the neural network output from being biased as there are more left turns than right turns (track #1 is counter clockwise). 
 	For example, below we plot an image after flipping:
 
 ![alt text](./Images/images_flip.jpg)
  
-####Using left/right cameras
+#### Using left/right cameras
 
 Using images from the left and right cameras enables to simulate different vehicle positions on the road and generate additional training data to simulate recovery. This approach is used by NVIDIA.
 
@@ -95,7 +95,7 @@ Below are examples of left, center and right camera images:
 
 I tested several offset values ranging from 0.15 to 0.25.
 
-####Translating images
+#### Translating images
 
 To simulate additional vehicle positions on the road I randomly translated input images. Actually I only translated images whose associated steering command was near zero (including also left and right images). Indeed input set contains a vast majority of steering command close to zero as most of the time the car is driving straight in the middle of the lane. The picture below represents a distribution of the steering commands.
 ![](./Images/histo_1.jpg)
@@ -117,7 +117,7 @@ We distinguish the 3 peaks at -0.2 / 0 / 0.2.
 
 ![](./Images/histo_5.jpg)
 
-###Data preprocessing
+### Data preprocessing
 
 The following image preprocessing is applied:
 
@@ -170,7 +170,7 @@ L2-regularization was applied on certain configurations.
 
 ### Model architecture
 
-####Initial model
+#### Initial model
 
 The Keras implementation of my first model (adapted from project #2) is shown below:
 

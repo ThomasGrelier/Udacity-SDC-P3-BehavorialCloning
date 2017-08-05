@@ -15,9 +15,6 @@ Learning the car to drive is done through the following steps:
 * Train and validate the model with a training and validation set
 * Test that the model successfully drives around the track without leaving the road
 
-## Table of content
-[TOC]
-
 ## Simulator
 
 Udacity's simulator can be downloaded [here](https://d17h27t6h515a5.cloudfront.net/topher/2017/February/58ae4419_windows-sim/windows-sim.zip).
@@ -63,24 +60,28 @@ There are two recordings corresponding to driving in normal and reverse ways.
 
 I also tried to test the behaviour on the second track. However it was a complete miss...
 
-## Solution detail 
+## Solution detail
+
 ###Data Set
 
 As I mentioned before I decided to use Udacity's image set. It contains 8036 sets of 3 images. Indeed the car has three cameras (left, center, right) so for each recording we get 3 images. Overall this amounts to more than 24000 images.
 I made a video of the training set, using onlyt the center camera image. It can be found in the [./Videos]() directory. We see that the training consisted in several laps in normal and reverse directions. We also can notice that the car has not a perfect straight driving!
 
 ### Data augmentation
+
 **Augmenting the data set provides a more comprehensive set of images and enables the model to better generalize.**
 
 To augment the data set, I implemented three methods which are described hereafter.
 
 ####Image flipping
+
 I randomly (with a probability of 0.5) flipped images (and steering angle): it prevents the neural network output from being biased as there are more left turns than right turns (track #1 is counter clockwise). 
 	For example, below we plot an image after flipping:
 
 ![alt text](./Images/images_flip.jpg)
  
 ####Using left/right cameras
+
 Using images from the left and right cameras enables to simulate different vehicle positions on the road and generate additional training data to simulate recovery. This approach is used by NVIDIA.
 
 Below are examples of left, center and right camera images:
@@ -95,6 +96,7 @@ Below are examples of left, center and right camera images:
 I tested several offset values ranging from 0.15 to 0.25.
 
 ####Translating images
+
 To simulate additional vehicle positions on the road I randomly translated input images. Actually I only translated images whose associated steering command was near zero (including also left and right images). Indeed input set contains a vast majority of steering command close to zero as most of the time the car is driving straight in the middle of the lane. The picture below represents a distribution of the steering commands.
 ![](./Images/histo_1.jpg)
 
@@ -137,12 +139,15 @@ Below we plot an example after cropping.
 ![](./Images/images_crop.jpg)
 
 ### Training
+
 #### Data generator
+
 Data augmentation creates a tremendous amount of data and it turns out to be impossible to store all the data in memory and then process it. 
 
 To overcome this problem we make use of Keras generators. Instead of storing the data in memory all at once, we generate it piece by piece and process it on the fly, which is much more memory-efficient. Image augmentation is thus done by the generator. As mentioned before image preprocessing is done through model layers.
 
 #### Optimizer
+
 I tested three different optimizers : SGD, RMSprop and Adam. I kept the default parameters values. They are recalled hereafter:
 
 * ```SGD(lr=0.01, momentum=0.0, decay=0.0, nesterov=False)```
@@ -150,10 +155,12 @@ I tested three different optimizers : SGD, RMSprop and Adam. I kept the default 
 * ```Adam(lr=0.001, beta_1=0.9, beta_2=0.999, epsilon=1e-08, decay=0.0)```
  
 #### Loss
- Mean Square Error.
- L2-regularization was applied on certain configurations.
+
+Mean Square Error.
+L2-regularization was applied on certain configurations.
 
 #### Hyperparameters
+
 * Number of epochs: {8}. I saved the model at the end of each epoch so as to finally use the one with the lowest loss. This is done with the Callback `ModelCheckpoint`.
 * Batch size: {32, 64, 128}
 * Regularization factor: {0.001, 0.005, 0.007, 0.01}
@@ -162,7 +169,9 @@ I tested three different optimizers : SGD, RMSprop and Adam. I kept the default 
 **20%** of the data set is used for model evaluation at the end of each epoch.
 
 ### Model architecture
+
 ####Initial model
+
 The Keras implementation of my first model (adapted from project #2) is shown below:
 
 	model = Sequential()
@@ -186,6 +195,7 @@ The model includes RELU layers to introduce nonlinearity.
 The model contains 3 dropout layers in order to reduce overfitting . 
 
 #### NVIDIA's Architecture
+
 Architecture of NVIDIA's CNN is represented below (image taken from their paper). It is composed of 5 convolutional layers, followed by 3 fully connected layers. They use strided convolutions in the first three convolutional layers with a 2x2 stride and a 5x5 kernel and a non-strided convolution with a 3x3 kernel size in the last two convolution layers.
 
 ![](./Images/NVIDIA_CNN.png)
@@ -223,7 +233,9 @@ An example of NVIDIA model implementation in Keras is the following:
 
 
 ### Model evaluation
+
 #### Test list
+
 All the configurations which were tested are listed in the table below. The last column indicates the result of the driving evaluation. I added a colour code to ease behaviour assessment.
 
  - green: perfect behaviour (car succeeds in driving a lap with smoothed centered trajectory) 
@@ -237,23 +249,24 @@ As we can see, no configuration ended up with green colour. Indeed as you may se
 ![](./Images/config.png)
 
 #### Results and analysis
+
 The main observations I made are the following:
 
 * Model : 
-	* Architecture: NVIDIA model behaves far better than my initial model. However I still could find a configuration where my initial model could perform a full lap. This means that the complexity of NVIDIA's model is not necessary to achieve this project. However for successful driving in many different situations, this level of complexity seems mandatory
+	* Architecture: as expected **NVIDIA model behaves quite better than my initial model**. However I still could find a configuration where my initial model could perform a full lap. This means that the complexity of NVIDIA's model is not necessary to achieve this project. However for successful driving in many different situations, this level of complexity seems mandatory
 	* Dropout: adding dropout layers increase the behaviour. However it is not necessary to add a lot of them. **Only one dropout layer on the inputs provided as good results as adding 5 dropout layers**.
 	* Activation: no noticeable difference between RELU and ELU.
 * Image augmentation:
-	* The best choice for the probability of translating images with near-zero steering angle was 0.9. That is we only keep 10% of straight driving images.
+	* The best choice for the probability of translating images with near-zero steering angle was **0.9**. That is we only keep 10% of straight driving images.
 	* Steering angle offset for left/right images between 0.20 and 0.25 appear fine
 	* Maximum translation : no big difference from 70 to 100 pixels
 	* Steering angle offset per pixel when translating the image: 0.004 was better than 0.005. This latter figure results in more zigzaging of the car
 * Training:
-	* Number of samples: increasing from 16000 to 24000 points brought very little improvements
-	* Nb of epochs: the optimization converged very quickly. After 3 epochs, the loss was almost stabilized. We can see it on the picture at the end of this paragraph.
+	* Number of samples: **increasing from 16072 to 24108 points brought very little improvements**
+	* Nb of epochs: **the optimization converged very quickly**. After 3 epochs, the loss was almost stabilized. We can see it on the picture at the end of this paragraph.
 	* Regularization: helps the car to drive straighter. The best values were between 0.005 and 0.01, and depended on other parameters. The higher the value the straigher drives the car, but the risk of going out in the curves increases!
-	* Batch size: 32 was the best choice. Surprisingly I got really bad results with 128.
-	* Optimizer: no noticeable differnece between Adam, RMSprop and SGD, at least for with the default values. Certainly tuning the hyperparameters could bring differences.
+	* Batch size: **32 was the best choice**. Surprisingly I got really bad results with 128.
+	* Optimizer: **no noticeable difference between Adam, RMSprop and SGD**, at least  with the default values. Certainly tuning the hyperparameters could bring differences.
 
 ![](./Images/loss.jpg)
 
@@ -273,6 +286,7 @@ The configuration is the following:
 * steering angle offset left/right images =	+/- 0.25
 
 ## References
+
 Below is a list of references that were wisely used to achieve this project.
 
 Useful hints from previous Udacity students:
